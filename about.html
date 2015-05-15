@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <meta name="author" content="Aditya Sakhuja" />
+    <meta name="description" content="Imperial College students on a mission to the edge of space" />
+    <meta name="keywords" content="IBM, Imperial, Space, Balloon, EIE, EEE, students, Edge of Space" />
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/nav.css">
+    <title>Edge of Space: About Us</title>
+
+</head>
+<body>
+    <header>
+                
+        <div class="text-vertical-center" id="logo-container">
+                <a href="index.html"><img id="logo" src="img/logo1.png">
+                <h1 id="title">Edge Of Space</h1></a>
+        </div>
+                
+        <nav id="cssmenu">
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="construction.html">Data &amp Graphs</a></li>
+                <li><a href="construction.html">Flight Simulation</a></li>
+                <li><a href="https://bluemiximp1.wordpress.com">Blog</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        
+    </header>
+
+    <div id="content">  
+
+        <section class="row">
+            <div class="col-full">
+
+            <!-- Project Information -->
+
+                <h2>Project Overview</h2>
+
+                <h5>Overview</h5>
+                <p>
+                    Send a ballon into near-space, and see what it&#8217;s like!
+                </p>
+                <p>
+                    Our project is primarily data-collection, and then finding an interesting way to present that data. The data will be from sensor recordings as a high-altitude balloon makes its journey from earth to 30km high and back again.
+                </p>
+
+                <h5>Pre-Flight</h5>
+                <p>
+                    We will design and construct a payload to be carried on the balloon, capable of taking recordings of the surroundings, such as temperature, altitude, and light levels. It must also be able to send back this data during flight, and have GPS tracking to hopefully allow us to recover it. Concurrently, we will also be designing  a website as a way of presenting the data in an interesting and informative manner.
+                </p>
+                
+                <h5>Launch</h5>
+                <p>
+                    Release the balloon and hope! We aim to have some way of presenting the data live as comes in from the balloon&#8217;s transmitters, perhaps via graphs on the website.
+                </p>
+                
+                <h5>Post-Flight</h5>
+                <p>
+                    We will try to recover the payload in a chase-car, using the payload&#8217;s GPS module. After recovery we can collect extra data, such as video which is too intensive to transmit during flight. This should allow us to create a more immersive  and realistic experience on the website.
+                </p>
+
+                <hr />
+
+                <!-- Members Information -->
+
+                <h2>Members</h2>
+    
+                <p>
+                    We are all 3rd year students at Imperial College London, 2015, and a mixture of Electrical and Electronic Engineers (EEE) and Electronic and Information Engineers (EIE).
+                </p>
+                
+                <p>
+                    <strong>Aditya Sakhuja</strong> (EIE) &#8211; Adventurous entrepreneur and tech whizz-kid, who enjoys making slick and aesthetically pleasing products (which includes this website!)
+                </p>
+                
+                <p>
+                    <strong>Alex Hadj-chaib</strong> (EEE) &#8211; A handsome Frenchman, who is our shining light in sensory needs. Excellent repertoire of facial expressions.
+                </p>
+                
+                <p>
+                    <strong>Constance Ji</strong> (EEE) &#8211; Cheat Master, with friends in high places.
+                </p>
+
+                <p>
+                    <strong>Dylan Auty</strong> (EIE) &#8211; Engineering student who likes making things work, being busy (HACKHACKHACKSPEEDHACK), and has almost everything in the world just &#8216;kicking about at home&#8217;
+                </p>
+                
+                <p>
+                    <strong>Jake Reynolds</strong> (EIE) &#8211; Enjoys knowing how things work, low-level coding, and getting on with it as &#8216;it&#8217;ll only take half an hour&#8217;
+                </p>
+                
+                <p>
+                    <strong>Jonny Zheng</strong> (EIE) &#8211; A hockey-playing fixer who &#8216;wants to make something move&#8217;. kthxbye.
+                </p>
+                
+                <p>
+                    <strong>Luke Ellison</strong> (EIE) &#8211; American football playing backend master who also happens to be making this neat website.
+                </p>
+
+                <hr />
+
+                <!-- Hardware Information -->
+
+                <h2>Hardware</h2>
+
+
+                <p>An evolving list of the hardware we have used.</p>
+                
+                <h5>Balloon and Payload Core</h5>
+                <ul>
+                    <li>Sent Into Space Launch Kit (Advanced)</li>
+                    <li>Raspberry Pi Model A+</li>
+                    <li>64GB Micro SD Card</li>
+                    <li>Pi Expansion board, Pi In The Sky (PITS)</li>
+                    <li>Pi Expansion board, LoRa Expansion, with 2 LoRa modules</li>
+                </ul>
+                <br>
+
+                <h5>Sensors</h5>
+                <ul>
+                    <li>Those incorporated in the Launch Kit black box and the PITS</li>
+                    <li>Raspberry Pi Cam</li>
+                    <li>Adafruit Accelerometer</li>
+                    <li>Adafruit FLORA Lux Sensor</li>
+                    <li>Adafruit Barometric/Pressure/Altitude/Temperature Sensor</li>
+                </ul>
+                <br>
+
+                <h5>Ground station</h5>
+                <ul>
+                    <li>Raspberry Pi model B</li>
+                    <li>8 GB Micro SD Card</li>
+                    <li>Pi Expansion board, LoRa Expansion, with 2 LoRa modules</li>
+                    <li>FUNcube Dongle Pro+</li>
+                </ul>
+                <br>
+
+                <h5>Explanations</h5>
+                <p>
+                    We started off with a comprehensive and useful launch kit, containing all the necessary equipment to send a balloon into near space. The Pi is the core processing unit in the payload, which will manage the peripherals and communication. The PITS adds one-way communication to the ground, with a secondary GPS to backup the one in the black box. It also provides a  basic image transferral protocol, which hopefully can be expanded to include some sensor data. The LoRa expansion board allows two-way communication, and a greater bandwidth of communication.
+                </p>
+                
+                <p>
+                    Although the black box contains some sensors, these cannot be sent live. The PITS contains temperature sensors, but none of the others. Hence we have added the extra peripheral sensors. As we have two methods of sending data, and usually more than one of each type of sensor, we hope to obtain accurate and complete data to simulate the environment.
+                </p>
+                
+                <p>
+                    The ground station requires a LoRa module board to communicate with that on the balloon, and also a dongle to detect the signals from the PITS&#8217;s radio transmitter.
+                </p>
+            </div>
+        </section>
+        
+        <div id="footer">
+            Website made by Luke Ellison & Aditya Sakhuja                    
+        </div>
+    </div>
+
+    
+
+    <!-- Javascripts -->
+    <script src="js/jquery.1.11.min.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+/*///////////////////////////////////////
+// Edge of Space
+// Author: Luke Ellison
+// Date: 27/4/2015
+///////////////////////////////////////*/
+
+text {
+	font: 10px sans-serif;
+	color: #fff;
+	stroke: #fff;
+}
+
+.axis text {
+	font: 10px sans-serif;
+	color: #fff;
+	stroke: #fff;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #fff;
+	shape-rendering: crispEdges;
+}
+
+.focus circle {
+	fill: none;
+	stroke: #fff;
+} 
+
+.focus text {
+	stroke: #fff;
+	fill: #fff;
+}
+
+.line {
+	stroke: #78b8f0;
+	stroke-width: 2;
+	fill: none;
+}
