@@ -1,0 +1,7 @@
+---
+applications:
+- buildpack: https://github.com/cloudfoundry/staticfile-buildpack
+  host: EOS
+  name: EOS
+  memory: 50M
+  
