@@ -11,8 +11,8 @@
 #cssmenu ul {
   list-style: none;
   margin: 0;
-  padding-top: 1em;
-  padding-right: 11em;
+/*  padding-top: 1em;*/
+  padding-right: 3em;
   line-height: 1;
   display: block;
   zoom: 1;
