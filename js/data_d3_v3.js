@@ -55,6 +55,8 @@ focus.append("text")
 var mouse = null; //Variable for holding mouse data, updated on mouse movement
 
 function callback(data){
+      data = extract_payload(data); //Remove id and rev from received data
+
       x.domain([0, d3.max(data, function(d) { return d.time; })]); //Set domains of scale functions
       y.domain([0, d3.max(data, function(d) { return d.temperature; })]);
 
@@ -114,7 +116,7 @@ function adjustFocus(data, mouse){ //Adjusts focus based on mouse position
     d1 = data[index];
     var d = x0 - d0.time > d1.time - x0 ? d1 : d0;
     focus.attr("transform", "translate(" + x(d.time) + "," + y(d.temperature) + ")");
-    focus.select("text").text("(" + d.time + "s, " + d.temperature + "\u00B0C)");
+    focus.select("text").text("(" + dp1(d.time) + "s, " + dp1(d.temperature) + "\u00B0C)");
     focus.select("text").attr("x", function(){
       var str = focus.attr("transform");
       str = str.slice(10);
@@ -126,15 +128,20 @@ function adjustFocus(data, mouse){ //Adjusts focus based on mouse position
     })
 };
 
-function type(d) { // Function for converting to number from string
-  d.time = +d.time;
-  d.temperature = +d.temperature;
-  return d;
-}
-
 function getData(){ // Function for refreshing the data tag in the html (effectively refreshing the data)
   if(d3.select(".data")) d3.select("data").remove();
   d3.select("script").insert("script")
     .attr("src", "data/example_sensor.js")
     .attr("class", "data");
 }
+
+function extract_payload(data){   // Extract expected info from json
+  var payload_array = [];
+  data.forEach(function(datum){
+    var payload = datum.payload; // Remove the id and rev from the json
+    payload_array.push(payload); 
+  })
+  return payload_array;
+}
+
+var dp1 = d3.format(".1f");
