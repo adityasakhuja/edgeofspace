@@ -41,20 +41,33 @@
             <div class="col-full">
                 <h2>Data &amp Graphs</h2>
                 <svg class="chart"></svg>
+                <div class="selectAxis">
+                    X-axis:
+                    <select id="xOption">
+                         <option value="Time">Time</option>
+                         <option value="Temperature">Temperature</option>
+                         <option value="Altitude">Altitude</option>
+                         <option value="Pressure">Pressure</option>
+                         <option value="Light">Light Intensity</option>
+                    </select>
+                    Y-axis:
+                    <select id="yOption">
+                         <option value="Time">Time</option>
+                         <option value="Temperature">Temperature</option>
+                         <option value="Altitude">Altitude</option>
+                         <option value="Pressure">Pressure</option>
+                         <option value="Light">Light Intensity</option>
+                    </select>
+                </div>
+                <br>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vel nisi vitae orci venenatis condimentum. Morbi non sapien in ex auctor malesuada. Aliquam quis quam vitae libero rutrum tristique. Sed congue, diam nec ullamcorper commodo, enim tellus feugiat orci, a rutrum dui magna placerat ipsum. Aliquam sagittis nisl scelerisque libero auctor ornare. Duis ut risus nec neque porttitor pharetra. Sed sagittis placerat risus, sed dignissim enim elementum a. Morbi id sem risus. Cras venenatis ligula sit amet ultrices efficitur. Donec cursus elit auctor mauris fermentum, nec eleifend metus laoreet. Nam dapibus elementum purus, a vulputate neque eleifend non.
+                    This interactive graph will display data received from the balloon during its flight. The graph will update live as the data comes in. I plan to add more functionality to this is the near future.
                 </p>
                 <p>
-                    Proin eu varius nunc, vitae scelerisque nunc. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce in tortor aliquet, auctor est ut, scelerisque lorem. Duis non elit ut quam viverra viverra. Praesent quis faucibus nisi. Praesent eu nisl ac ipsum faucibus tempus. In hac habitasse platea dictumst. Nulla mattis commodo massa, at lobortis arcu faucibus sed. Proin eleifend in dui vitae pulvinar. Vivamus rhoncus nec massa ut tempor. Ut tristique tellus magna, id mollis nisl varius vel. Donec non tellus justo. Quisque ultricies aliquam justo nec pellentesque. Cras finibus tincidunt nisl in molestie.
+                    The Data shown here is example data of four points and will not update as the flight has yet to commence.
                 </p>
                 <p>
-                    Nullam aliquet leo malesuada accumsan egestas. Nulla erat quam, congue in imperdiet quis, interdum eu urna. Vivamus nisi nunc, convallis porttitor scelerisque vitae, sagittis ac diam. Integer suscipit dui id eleifend fermentum. Nunc et porta ex, quis ultrices sem. Vestibulum tortor ipsum, vulputate eu turpis in, pretium placerat augue. Cras eu turpis non justo pellentesque malesuada et in nunc. Etiam molestie nulla metus, vel sodales felis vulputate convallis. Ut finibus ligula eu lobortis pharetra. Nullam magna tortor, consequat vitae efficitur id, interdum id dolor. Fusce porta mattis arcu, nec semper dui lacinia a. Vivamus scelerisque consequat orci vitae vulputate. Pellentesque fermentum dolor nec magna condimentum, sed suscipit sapien venenatis. In nec interdum ex, a rhoncus elit. Nam quis mollis mauris, in efficitur nisi. Maecenas condimentum sagittis diam et euismod.
-                </p>
-                <p>
-                    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec et consequat purus. Suspendisse dapibus velit leo, non rutrum mi ultricies a. Praesent tincidunt magna nec tortor semper, eget maximus erat pretium. Fusce iaculis mi ut lectus facilisis, id porta sem scelerisque. Nulla facilisi. Nulla facilisi. Vestibulum id finibus orci, nec facilisis lectus. Nunc malesuada elit et lacus fringilla, in sagittis metus lacinia. Praesent diam diam, eleifend id turpis id, euismod porttitor diam. Integer et magna eget nisl bibendum bibendum eu eu augue. Etiam viverra quis quam quis varius. In at enim ac est viverra sollicitudin sed tincidunt lectus. Quisque consectetur diam nisl, a maximus lectus ultrices sed. Phasellus eget aliquam mauris.
-                </p>
-                <p>
-                    In sem magna, luctus ut quam ut, egestas rutrum sapien. Nulla mattis ut lacus a cursus. Integer sapien est, tempor nec tempus nec, laoreet malesuada tellus. Nunc volutpat condimentum erat in tempor. Ut accumsan venenatis ligula at fermentum. Etiam nec ornare elit. Mauris eget dapibus nibh. Maecenas porttitor tellus pulvinar, consequat dui eget, egestas magna.
+                    Made by Luke Ellison using D3.js.
                 </p>
             </div>
         </section> 
@@ -67,7 +80,7 @@
     <script src="js/jquery.1.11.min.js"></script>
     <script src="js/main.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="js/data_d3_v3.js"></script>
+    <script src="js/data_d3.js"></script>
 
 </body>
 </html>
