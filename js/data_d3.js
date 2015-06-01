@@ -53,8 +53,13 @@ focus.append("text")
   .attr("dy", ".35em"); 
 
 var mouse = null; //Variable for holding mouse data, updated on mouse movement
-var xOption = d3.select("#xOption").node().value; //Get the axis options from the html
-var yOption = d3.select("#yOption").node().value;
+var units = { // Data of corrisponding units for axis
+  "Time" : "s",
+  "Temperature" : "\u00B0C",
+  "Altitude" : "m",
+  "Pressure" : "atm",
+  "Light" : "cd"
+}
 
 function callback(data){
       data = extract_payload(data); //Remove id and rev from received data
@@ -94,22 +99,38 @@ function callback(data){
       adjustFocus(data, mouse);
 };
 
+function changeAxis(){
+  chart.selectAll(".axis.text").remove();
+
+  var xOption = d3.select("#xOption").node().value; //Get the axis options from the html
+  var yOption = d3.select("#yOption").node().value;
+
+  chart.append("text") // Text label for the x axis
+      .attr("class", "axis text")
+      .attr("x", width/2 )
+      .attr("y", height + margin.bottom -10 )
+      .style("text-anchor", "middle")
+      .text(xOption + " / " + units[xOption]);
+
+  chart.append("text") // Text label for the y axis
+      .attr("class", "axis text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text(yOption + " / " + units[yOption]);
+
+  //x.domain([0, d3.max(data, function(d) { return d[]; })]); //Set domains of scale functions
+  //y.domain([0, d3.max(data, function(d) { return d.temperature; })]);
+
+
+}
+
 getData(); //Initial get of data
+changeAxis();
 setInterval(getData, 2000); //Re-render every 2 seconds
 
-chart.append("text") // Text label for the x axis
-    .attr("x", width/2 )
-    .attr("y", height + margin.bottom -10 )
-    .style("text-anchor", "middle")
-    .text("Time / s");
-
-chart.append("text") // Text label for the y axis
-    .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left)
-    .attr("x",0 - (height / 2))
-    .attr("dy", "1em")
-    .style("text-anchor", "middle")
-    .text("Temperature / \u00B0Celcius");
 
 function adjustFocus(data, mouse){ //Adjusts focus based on mouse position
     var x0 = x.invert(mouse[0]-margin.left),
@@ -148,10 +169,3 @@ function extract_payload(data){   // Extract expected info from json
 
 var dp1 = d3.format(".1f");
 
-var units = { // Data of corrisponding units for axis
-  "Time" : "s",
-  "Temperature" : "\u00B0C",
-  "Altitude" : "m",
-  "Pressure" : "atm",
-  "Light" : "cd"
-}
