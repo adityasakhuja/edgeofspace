@@ -30,17 +30,17 @@ var chart = d3.select(".chart") // Create the chart space with margins
 
 var lineGen = d3.svg.line().interpolate("linear") //function for drawing the line based off built in function
   .x(function(d) {
-    return x(d.time);
+    return x(d[xValue]);
   })
   .y(function(d) {
-    return y(d.temperature);
+    return y(d[yValue]);
   });
 
 var line = chart.append("path")
   .attr("class","line")
   .attr("d", "0"); //Create line element
 
-var bisect = d3.bisector(function(d) { return d.time; }).right; // Create custom bisector
+var bisect = d3.bisector(function(d) { return d[xValue]; }).right; // Create custom bisector
 
 var focus = chart.append("g") // Create the focus circle thingy
   .attr("class", "focus")
@@ -52,20 +52,25 @@ focus.append("circle")
 focus.append("text")
   .attr("dy", ".35em"); 
 
+var xOption = null; //Variables for holfing user's axis options
+var yOption = null;
+var xValue = null;
+var yValue = null;
 var mouse = null; //Variable for holding mouse data, updated on mouse movement
 var units = { // Data of corrisponding units for axis
-  "Time" : "s",
-  "Temperature" : "\u00B0C",
-  "Altitude" : "m",
-  "Pressure" : "atm",
-  "Light" : "cd"
+  "time" : "s",
+  "temperature" : "\u00B0C",
+  "altitude" : "m",
+  "pressure" : "atm",
+  "light" : "cd"
 }
 
 function callback(data){
+      outsideData = data;
       data = extract_payload(data); //Remove id and rev from received data
 
-      x.domain([0, d3.max(data, function(d) { return d.time; })]); //Set domains of scale functions
-      y.domain([0, d3.max(data, function(d) { return d.temperature; })]);
+      x.domain([0, d3.max(data, function(d) { return d[xValue]; })]); //Set domains of scale functions
+      y.domain([0, d3.max(data, function(d) { return d[yValue]; })]);
 
       if (chart.selectAll(".x.axis")[0].length < 1 ){ // if no x axis exists, create one
         chart.append("g")
@@ -102,15 +107,19 @@ function callback(data){
 function changeAxis(){
   chart.selectAll(".axis.text").remove();
 
-  var xOption = d3.select("#xOption").node().value; //Get the axis options from the html
-  var yOption = d3.select("#yOption").node().value;
+  var xop = document.getElementById("xOption");
+  var yop = document.getElementById("yOption");
+  xOption = xop.options[xop.selectedIndex].text; //Get the axis options from the html
+  yOption = yop.options[yop.selectedIndex].text;
+  xValue = xop.options[xop.selectedIndex].value;
+  yValue = yop.options[yop.selectedIndex].value;
 
   chart.append("text") // Text label for the x axis
       .attr("class", "axis text")
       .attr("x", width/2 )
       .attr("y", height + margin.bottom -10 )
       .style("text-anchor", "middle")
-      .text(xOption + " / " + units[xOption]);
+      .text(xOption + " / " + units[xValue]);
 
   chart.append("text") // Text label for the y axis
       .attr("class", "axis text")
@@ -119,16 +128,11 @@ function changeAxis(){
       .attr("x",0 - (height / 2))
       .attr("dy", "1em")
       .style("text-anchor", "middle")
-      .text(yOption + " / " + units[yOption]);
-
-  //x.domain([0, d3.max(data, function(d) { return d[]; })]); //Set domains of scale functions
-  //y.domain([0, d3.max(data, function(d) { return d.temperature; })]);
-
-
+      .text(yOption + " / " + units[yValue]);
 }
 
-getData(); //Initial get of data
 changeAxis();
+getData(); //Initial get of data
 setInterval(getData, 2000); //Re-render every 2 seconds
 
 
@@ -137,9 +141,9 @@ function adjustFocus(data, mouse){ //Adjusts focus based on mouse position
     index = bisect(data, x0),
     d0 = data[index - 1],
     d1 = data[index];
-    var d = x0 - d0.time > d1.time - x0 ? d1 : d0;
-    focus.attr("transform", "translate(" + x(d.time) + "," + y(d.temperature) + ")");
-    focus.select("text").text("(" + dp1(d.time) + "s, " + dp1(d.temperature) + "\u00B0C)");
+    var d = x0 - d0[xValue] > d1[xValue] - x0 ? d1 : d0;
+    focus.attr("transform", "translate(" + x(d[xValue]) + "," + y(d[yValue]) + ")");
+    focus.select("text").text("(" + dp1(d[xValue]) + units[xValue] + ", " + dp1(d[yValue]) + units[yValue] + ")");
     focus.select("text").attr("x", function(){
       var str = focus.attr("transform");
       str = str.slice(10);
