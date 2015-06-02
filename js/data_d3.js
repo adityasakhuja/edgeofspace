@@ -44,7 +44,7 @@ var bisect = d3.bisector(function(d) { return d[xValue]; }).right; // Create cus
 
 var focus = chart.append("g") // Create the focus circle thingy
   .attr("class", "focus")
-  .style("display", "none");
+  .style("display", null);
 
 focus.append("circle")
   .attr("r", 4.5);
@@ -136,11 +136,32 @@ getData(); //Initial get of data
 setInterval(getData, 2000); //Re-render every 2 seconds
 
 
-function adjustFocus(data, mouse){ //Adjusts focus based on mouse position
+function adjustFocus(data, mouse){
+    var mx = mouse[0]-margin.left;
+    var my = mouse[1]-margin.top;
+    var dx = x.invert(mx);
+    var dy = y.invert(my);
+  
+    focus.attr("transform", "translate(" + mx + "," + my + ")");
+    focus.select("text").text("(" + sf3(dx) + units[xValue] + ", " + sf3(dy) + units[yValue] + ")");
+    focus.select("text").attr("x", function(){
+      var str = focus.attr("transform");
+      str = str.slice(10);
+      var num = parseInt(str);
+      if(num > 800){
+        return -80;
+      }
+      else return 10;
+    })  
+}
+
+function adjustFocus2(data, mouse){ //Adjusts focus based on mouse position but sticks to data points (only if x axis is sorted)
     var x0 = x.invert(mouse[0]-margin.left),
     index = bisect(data, x0),
     d0 = data[index - 1],
     d1 = data[index];
+    console.log(index + " , " + x0);
+
     var d = x0 - d0[xValue] > d1[xValue] - x0 ? d1 : d0;
     focus.attr("transform", "translate(" + x(d[xValue]) + "," + y(d[yValue]) + ")");
     focus.select("text").text("(" + dp1(d[xValue]) + units[xValue] + ", " + dp1(d[yValue]) + units[yValue] + ")");
@@ -171,5 +192,5 @@ function extract_payload(data){   // Extract expected info from json
   return payload_array;
 }
 
-var dp1 = d3.format(".1f");
+var sf3 = d3.format(".3r");
 
