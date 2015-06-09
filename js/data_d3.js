@@ -66,7 +66,6 @@ var units = { // Data of corrisponding units for axis
 }
 
 function callback(data){
-      outsideData = data;
       data = extract_payload(data); //Remove id and rev from received data
 
       x.domain([0, d3.max(data, function(d) { return d[xValue]; })]); //Set domains of scale functions
