@@ -16,7 +16,11 @@ var y = d3.scale.linear() //Function for scaling y data to chart size
 
 var xAxis = d3.svg.axis() //Function for drawing x axis
     .scale(x)
-    .orient("bottom");
+    .orient("bottom")
+    .tickFormat(function(d){
+      if (xValue == "time" || xValue == "pitime") return untimeify(d);
+      else return d;
+    })
 
 var yAxis = d3.svg.axis() //Function for drawing y axis
     .scale(y)
@@ -118,8 +122,16 @@ ws.onclose = function(){
 };
 
 function drawData(){
-    x.domain([d3.min(data, accessorx), d3.max(data, accessorx)]); //Set domains of scale functions
-    y.domain([d3.min(data, accessory), d3.max(data, accessory)]);
+    var minx = d3.min(data, accessorx);
+    var maxx = d3.max(data, accessorx);
+    var miny = d3.min(data, accessory);
+    var maxy = d3.max(data, accessory);
+
+    //Set domains of scale functions
+    if(minx == maxx) x.domain([0, maxx]);
+    else x.domain([minx,maxx]);
+    if(miny == maxy) y.domain([0, maxy]);
+    else y.domain([miny,maxy]);
 
     if (chart.selectAll(".x.axis")[0].length < 1 ){ // if no x axis exists, create one
       chart.append("g")
@@ -186,8 +198,8 @@ function changeAxis(){
 function getData(){ // Function for refreshing the data tag in the html (effectively refreshing the data)
   if(d3.select(".data")) d3.select("data").remove();
   d3.select("script").insert("script")
-    // .attr("src", "http://balloon.mybluemix.net/getdata")
-    .attr("src", "data/example_sensor.js")
+    .attr("src", "http://balloon.mybluemix.net/getdata")
+    //.attr("src", "data/example_sensor.js")
     .attr("class", "data");
 }
 
@@ -207,21 +219,27 @@ function adjustFocus(data, mouse){ //Adjusts focus based on mouse position but s
       str = str.slice(10);
       var num = parseInt(str);
       if(num > 800){
-        return -80;
+        return -110;
       }
       else return 10;
     })
 };
 
 function sf3(value){
-  var format = d3.format(".3r");
+  var format = d3.format(".4r");
   if(typeof value == 'string' || value instanceof String) return value;
   else return format(value);
 }
 function timeify(time){
   var t = time.split(":");
-  console.log(t);
-  var mins = t[1] + t[0]*60;
-  var secs = t[2] + mins*60;
+  var mins = parseInt(t[1]) + parseInt(t[0])*60;
+  var secs = parseInt(t[2]) + mins*60;
   return secs;
+}
+function untimeify(totalsecs){
+  var mins = Math.floor(totalsecs/60);
+  var secs = totalsecs - mins*60;
+  var hrs = Math.floor(mins/60);
+  mins = mins - hrs*60;
+  return hrs + ":" + mins + ":" + secs;
 }
