@@ -29,19 +29,19 @@ var chart = d3.select(".chart") // Create the chart space with margins
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 var accessorx = function(d){
-  if(xValue == "time" || xValue == "pitime") return timeify.parse(d[xValue.toUpperCase()]);
+  if(xValue == "time" || xValue == "pitime") return timeify(d[xValue.toUpperCase()]);
   else return d[xValue.toUpperCase()]
 }
 var accessorx_scaled = function(d){
-  if(xValue == "time" || xValue == "pitime") return x(timeify.parse(d[xValue.toUpperCase()]));
+  if(xValue == "time" || xValue == "pitime") return x(timeify(d[xValue.toUpperCase()]));
   else return x(d[xValue.toUpperCase()])
 }
 var accessory = function(d){
-  if(yValue == "time" || yValue == "pitime") return timeify.parse(d[yValue.toUpperCase()]);
+  if(yValue == "time" || yValue == "pitime") return timeify(d[yValue.toUpperCase()]);
   else return d[yValue.toUpperCase()];
 }
 var accessory_scaled = function(d){
-  if(yValue == "time" || yValue == "pitime") return y(timeify.parse(d[yValue.toUpperCase()]));
+  if(yValue == "time" || yValue == "pitime") return y(timeify(d[yValue.toUpperCase()]));
   else return y(d[yValue.toUpperCase()]);
 }
 
@@ -71,8 +71,8 @@ var xValue = null;
 var yValue = null;
 var mouse = null; //Variable for holding mouse data, updated on mouse movement
 var units = { // Data of corrisponding units for axis
-  "time" : "hr:min:s",
-  "pitime" : "hr:min:s",
+  "time" : "bst",
+  "pitime" : "bst",
   "temperature" : "\u00B0C",
   "altitude" : "m",
   "pressure" : "Pa",
@@ -213,11 +213,15 @@ function adjustFocus(data, mouse){ //Adjusts focus based on mouse position but s
     })
 };
 
-var sf3 = d3.format(".3r");
+function sf3(value){
+  var format = d3.format(".3r");
+  if(typeof value == 'string' || value instanceof String) return value;
+  else return format(value);
+}
 function timeify(time){
   var t = time.split(":");
-  var mins = t[0]*
-  var secs = t[2];
-  secs = secs + t[1]*60;
-  secs = secs + t[0]
+  console.log(t);
+  var mins = t[1] + t[0]*60;
+  var secs = t[2] + mins*60;
+  return secs;
 }

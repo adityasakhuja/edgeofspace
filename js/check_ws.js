@@ -1,7 +1,7 @@
 if ("WebSocket" in window){
 	console.log("Websockets enabled");
 	d3.select("body").append("script")
-		.attr("src", "js/data_d3_ws.js")
+		.attr("src", "js/data_d3_ws_v2.js")
 }
 else{
 	console.log("Websockets not enabled with browser");
