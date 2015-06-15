@@ -100,7 +100,6 @@ function callback(new_data){
     return parseFloat(accessorx(a))-parseFloat(accessorx(b));
   });  
 
-  console.log(new_data);
   data = new_data;
   drawData();
 }
