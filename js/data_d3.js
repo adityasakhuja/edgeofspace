@@ -24,8 +24,12 @@ var xAxis = d3.svg.axis() //Function for drawing x axis
 
 var yAxis = d3.svg.axis() //Function for drawing y axis
     .scale(y)
-    .orient("left");
-
+    .orient("left")
+    .tickFormat(function(d){
+      if (xValue == "time" || xValue == "pitime") return untimeify(d);
+      else return d;
+    });
+    
 var chart = d3.select(".chart") // Create the chart space with margins
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
