@@ -26,7 +26,7 @@ var yAxis = d3.svg.axis() //Function for drawing y axis
     .scale(y)
     .orient("left")
     .tickFormat(function(d){
-      if (xValue == "time" || xValue == "pitime") return untimeify(d);
+      if (yValue == "time" || yValue == "pitime") return untimeify(d);
       else return d;
     });
     
