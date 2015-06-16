@@ -1,58 +1,42 @@
 callback([
 {
-	"_id": "02d320353e88f0be02372a8aec48e06c",
-    "_rev": "1-34927847cc0c424fc75f8097cb68a60d",
-    "payload": {
-		"time" : 0,
-		"temperature" : 29.1,
-		"altitude" : 0,
-		"light" : 1.34,
-		"pressure" : 1,
-		"accelx" : 0,
-		"accely" : 0,
-		"accelz" : 0
-	}
+	"TIME" : "17:52:37",
+	"TEMPERATURE" : 29.1,
+	"ALTITUDE" : 0,
+	"LIGHT" : 1.34,
+	"PRESSURE" : 1,
+	"X" : 0,
+	"Y" : 0,
+	"Z" : 0
 },
 {
-	"_id": "02d320353e88f0be02372a8aec48e06c",
-    "_rev": "1-34927847cc0c424fc75f8097cb68a60d",
-    "payload": {
-		"time" : 2.7,
-		"temperature" : 21.23,
-		"altitude" : 10,
-		"light" : 5.49,
-		"pressure" : 0.9,
-		"accelx" : 0,
-		"accely" : 0,
-		"accelz" : 0
-	}
+	"TIME" : "17:52:39",
+	"TEMPERATURE" : 28.1,
+	"ALTITUDE" : 10.3,
+	"LIGHT" : 2.98,
+	"PRESSURE" : 2,
+	"X" : 0,
+	"Y" : 0,
+	"Z" : 0
 },
 {
-	"_id": "02d320353e88f0be02372a8aec48e06c",
-    "_rev": "1-34927847cc0c424fc75f8097cb68a60d",
-    "payload": {
-		"time" : 6.91,
-		"temperature" : 22.57,
-		"altitude" : 20.4,
-		"light" : 0.56,
-		"pressure" : 0.77,
-		"accelx" : 0,
-		"accely" : 0,
-		"accelz" : 0
-	}
+	"TIME" : "17:53:22",
+	"TEMPERATURE" : 22.1,
+	"ALTITUDE" : 40.6,
+	"LIGHT" : 0.73,
+	"PRESSURE" : 3.4,
+	"X" : 0,
+	"Y" : 0,
+	"Z" : 0
 },
 {
-	"_id": "02d320353e88f0be02372a8aec48e06c",
-    "_rev": "1-34927847cc0c424fc75f8097cb68a60d",
-    "payload": {
-		"time" : 18,
-		"temperature" : 12,
-		"altitude" : 29.8,
-		"light" : 3.33322313,
-		"pressure" : 0.667,
-		"accelx" : 0,
-		"accely" : 0,
-		"accelz" : 0
-	}
+	"TIME" : "17:51:01",
+	"TEMPERATURE" : 29.1,
+	"ALTITUDE" : 96.3,
+	"LIGHT" : 5.67,
+	"PRESSURE" : 5.3,
+	"X" : 0,
+	"Y" : 0,
+	"Z" : 0
 }
 ])

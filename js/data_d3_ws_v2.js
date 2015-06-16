@@ -4,7 +4,7 @@
 // Date: 27/4/2015
 ////////////////////////////////////////
 
-var margin = {top: 20, right: 40, bottom: 40, left: 40}, //Define margins
+var margin = {top: 20, right: 40, bottom: 40, left: 55}, //Define margins
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -20,7 +20,7 @@ var xAxis = d3.svg.axis() //Function for drawing x axis
     .tickFormat(function(d){
       if (xValue == "time" || xValue == "pitime") return untimeify(d);
       else return d;
-    });
+    })
 
 var yAxis = d3.svg.axis() //Function for drawing y axis
     .scale(y)
@@ -96,7 +96,35 @@ var units = { // Data of corrisponding units for axis
   "z" : "g"
 }
 
-function callback(data){
+var ws = new WebSocket("ws://balloon.mybluemix.net/balloondata");
+var data = [];
+
+function callback(new_data){
+  new_data.sort(function(a, b){ // Sort by chosen 
+    return parseFloat(accessorx(a))-parseFloat(accessorx(b));
+  });  
+
+  data = new_data;
+  drawData();
+}
+changeAxis();
+
+ws.onmessage = function (msg){
+  d = msg.data ;
+  console.log(d);
+  index = bisect(data, d);
+  data.splice(index,0,d);
+  drawData();
+};
+
+ws.onclose = function(){ 
+  // attempt to reconnect
+  alert("Connection is closed, attemping reconnect");
+  ws = new WebSocket("ws://balloon.mybluemix.net/balloondata");
+  data = [];
+};
+
+function drawData(){
     var minx = d3.min(data, accessorx);
     var maxx = d3.max(data, accessorx);
     var miny = d3.min(data, accessory);
@@ -124,7 +152,7 @@ function callback(data){
     } else { // otherwise, update the axis
       chart.selectAll(".y.axis").transition().duration(1500).call(yAxis);
     }
-    
+
     line.transition().duration(1500) // transition from previous paths to new paths
       .attr("d",lineGen(data));
 
@@ -166,72 +194,39 @@ function changeAxis(){
       .style("text-anchor", "middle")
       .text(yOption + " / " + units[yValue]);
 
-  getData();
-}
-
-changeAxis();
-getData(); //Initial get of data
-setInterval(getData, 2000); //Re-render every 2 seconds
-
-
-function adjustFocus(data, mouse){
-    var mx = mouse[0]-margin.left;
-    var my = mouse[1]-margin.top;
-    var dx = x.invert(mx);
-    var dy = y.invert(my);
-
-    if (xValue == "time" || xValue == "pitime") dx=untimeify(dx);
-    if (yValue == "time" || yValue == "pitime") dy=untimeify(dy);
-  
-    focus.attr("transform", "translate(" + mx + "," + my + ")");
-    focus.select("text").text("(" + sf3(dx) + units[xValue] + ", " + sf3(dy) + units[yValue] + ")");
-    focus.select("text").attr("x", function(){
-      var str = focus.attr("transform");
-      str = str.slice(10);
-      var num = parseInt(str);
-      if(num > 800){
-        return -80;
-      }
-      else return 10;
-    })  
-}
-
-function adjustFocus2(data, mouse){ //Adjusts focus based on mouse position but sticks to data points (only if x axis is sorted)
-    var x0 = x.invert(mouse[0]-margin.left),
-    index = bisect(data, x0),
-    d0 = data[index - 1],
-    d1 = data[index];
-    console.log(index + " , " + x0);
-
-    var d = x0 - d0[xValue] > d1[xValue] - x0 ? d1 : d0;
-    focus.attr("transform", "translate(" + x(d[xValue]) + "," + y(d[yValue]) + ")");
-    focus.select("text").text("(" + dp1(d[xValue]) + units[xValue] + ", " + dp1(d[yValue]) + units[yValue] + ")");
-    focus.select("text").attr("x", function(){
-      var str = focus.attr("transform");
-      str = str.slice(10);
-      var num = parseInt(str);
-      if(num > 800){
-        return -80;
-      }
-      else return 10;
-    })
+  if(data.length > 0) callback(data);
+  else getData();
 };
 
 function getData(){ // Function for refreshing the data tag in the html (effectively refreshing the data)
   if(d3.select(".data")) d3.select("data").remove();
   d3.select("script").insert("script")
     .attr("src", "http://balloon.mybluemix.net/getdata")
+    //.attr("src", "data/example_sensor.js")
     .attr("class", "data");
 }
 
-function extract_payload(data){   // Extract expected info from json
-  var payload_array = [];
-  data.forEach(function(datum){
-    var payload = datum.payload; // Remove the id and rev from the json
-    payload_array.push(payload); 
-  })
-  return payload_array;
-}
+function adjustFocus(data, mouse){ //Adjusts focus based on mouse position but sticks to data points (only if x axis is sorted)
+    var x0 = x.invert(mouse[0]-margin.left),
+    index = bisect(data, x0),
+    d0 = data[index - 1],
+    d1 = data[index];
+    var d = null;
+    if(d0 == undefined) d = d1;
+    else if(d1 == undefined) d = d0;
+    else d = x0 - accessorx(d0) > accessorx(d1) - x0 ? d1 : d0;
+    focus.attr("transform", "translate(" + x(accessorx(d)) + "," + y(accessory(d)) + ")");
+    focus.select("text").text("(" + sf3(d[xValue.toUpperCase()]) + units[xValue] + ", " + sf3(d[yValue.toUpperCase()]) + units[yValue] + ")");
+    focus.select("text").attr("x", function(){
+      var str = focus.attr("transform");
+      str = str.slice(10);
+      var num = parseInt(str);
+      if(num > 800){
+        return -110;
+      }
+      else return 10;
+    })
+};
 
 function sf3(value){
   var format = d3.format(".4r");
@@ -249,5 +244,5 @@ function untimeify(totalsecs){
   var secs = totalsecs - mins*60;
   var hrs = Math.floor(mins/60);
   mins = mins - hrs*60;
-  return hrs + ":" + mins + ":" + Math.round(secs);
+  return hrs + ":" + mins + ":" + secs;
 }

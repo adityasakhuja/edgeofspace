@@ -16,52 +16,31 @@ var y = d3.scale.linear() //Function for scaling y data to chart size
 
 var xAxis = d3.svg.axis() //Function for drawing x axis
     .scale(x)
-    .orient("bottom")
-    .tickFormat(function(d){
-      if (xValue == "time" || xValue == "pitime") return untimeify(d);
-      else return d;
-    });
+    .orient("bottom");
 
 var yAxis = d3.svg.axis() //Function for drawing y axis
     .scale(y)
-    .orient("left")
-    .tickFormat(function(d){
-      if (yValue == "time" || yValue == "pitime") return untimeify(d);
-      else return d;
-    });
-    
+    .orient("left");
+
 var chart = d3.select(".chart") // Create the chart space with margins
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var accessorx = function(d){
-  if(xValue == "time" || xValue == "pitime") return timeify(d[xValue.toUpperCase()]);
-  else return d[xValue.toUpperCase()]
-}
-var accessorx_scaled = function(d){
-  if(xValue == "time" || xValue == "pitime") return x(timeify(d[xValue.toUpperCase()]));
-  else return x(d[xValue.toUpperCase()])
-}
-var accessory = function(d){
-  if(yValue == "time" || yValue == "pitime") return timeify(d[yValue.toUpperCase()]);
-  else return d[yValue.toUpperCase()];
-}
-var accessory_scaled = function(d){
-  if(yValue == "time" || yValue == "pitime") return y(timeify(d[yValue.toUpperCase()]));
-  else return y(d[yValue.toUpperCase()]);
-}
-
 var lineGen = d3.svg.line().interpolate("linear") //function for drawing the line based off built in function
-  .x(accessorx_scaled)
-  .y(accessory_scaled);
+  .x(function(d) {
+    return x(d[xValue.toUpperCase()]);
+  })
+  .y(function(d) {
+    return y(d[yValue.toUpperCase()]);
+  });
 
 var line = chart.append("path")
   .attr("class","line")
   .attr("d", "0"); //Create line element
 
-var bisect = d3.bisector(accessorx).left; // Create custom bisector
+var bisect = d3.bisector(function(d) { return d[xValue.toUpperCase()]; }).right; // Create custom bisector
 
 var focus = chart.append("g") // Create the focus circle thingy
   .attr("class", "focus")
@@ -79,34 +58,51 @@ var xValue = null;
 var yValue = null;
 var mouse = null; //Variable for holding mouse data, updated on mouse movement
 var units = { // Data of corrisponding units for axis
-  "time" : "bst",
-  "pitime" : "bst",
+  "time" : "s",
   "temperature" : "\u00B0C",
   "altitude" : "m",
-  "pressure" : "Pa",
-  "light" : "lux",
-  "humidity" : "%",
-  "gpsinternaltemp" : "\u00B0C",
-  "direction" : "\u00B0",
-  "speed" : "m/s",
-  "satellites" : "sats",
-  "batteryvoltage" : "V",
-  "x" : "g",
-  "y" : "g",
-  "z" : "g"
+  "pressure" : "atm",
+  "light" : "cd"
 }
 
-function callback(data){
-    var minx = d3.min(data, accessorx);
-    var maxx = d3.max(data, accessorx);
-    var miny = d3.min(data, accessory);
-    var maxy = d3.max(data, accessory);
+var ws = new WebSocket("ws://balloon.mybluemix.net/balloondata");
+var data = [];
 
-    //Set domains of scale functions
-    if(minx == maxx) x.domain([0, maxx]);
-    else x.domain([minx,maxx]);
-    if(miny == maxy) y.domain([0, maxy]);
-    else y.domain([miny,maxy]);
+
+ws.onopen = ; //Where it all begins
+
+function callback(jsonp){
+  data = jsonp;
+  changeAxis();
+}
+
+ws.onmessage = function (msg){
+  var d = JSON.parse(msg.data);
+  console.log(d);
+
+  index = bisect(data, d);
+  data.splice(index,0,d);
+  console.log(data);
+  drawData();
+};
+
+ws.onclose = function(){ 
+  // attempt to reconnect
+  alert("Connection is closed, attemping reconnect");
+  ws = new WebSocket("ws://balloon.mybluemix.net/balloondata");
+  data = [];
+};
+
+function getData(){ // Function for refreshing the data tag in the html (effectively refreshing the data)
+  if(d3.select(".data")) d3.select("data").remove();
+  d3.select("script").insert("script")
+    .attr("src", "data/example_sensor.js")
+    .attr("class", "data");
+}
+
+function drawData(){
+    x.domain([0, d3.max(data, function(d) { return d[xValue.toUpperCase()]; })]); //Set domains of scale functions
+    y.domain([0, d3.max(data, function(d) { return d[yValue.toUpperCase()]; })]);
 
     if (chart.selectAll(".x.axis")[0].length < 1 ){ // if no x axis exists, create one
       chart.append("g")
@@ -124,7 +120,7 @@ function callback(data){
     } else { // otherwise, update the axis
       chart.selectAll(".y.axis").transition().duration(1500).call(yAxis);
     }
-    
+
     line.transition().duration(1500) // transition from previous paths to new paths
       .attr("d",lineGen(data));
 
@@ -166,46 +162,24 @@ function changeAxis(){
       .style("text-anchor", "middle")
       .text(yOption + " / " + units[yValue]);
 
-  getData();
+  sortData();
+  drawData();
+};
+
+function sortData(){
+    data.sort(function(a, b){ // Sort Xaxis value
+    return parseFloat(a[xValue.toUpperCase()])-parseFloat(b[xValue.toUpperCase()]);
+  });
 }
 
-changeAxis();
-getData(); //Initial get of data
-setInterval(getData, 2000); //Re-render every 2 seconds
-
-
-function adjustFocus(data, mouse){
-    var mx = mouse[0]-margin.left;
-    var my = mouse[1]-margin.top;
-    var dx = x.invert(mx);
-    var dy = y.invert(my);
-
-    if (xValue == "time" || xValue == "pitime") dx=untimeify(dx);
-    if (yValue == "time" || yValue == "pitime") dy=untimeify(dy);
-  
-    focus.attr("transform", "translate(" + mx + "," + my + ")");
-    focus.select("text").text("(" + sf3(dx) + units[xValue] + ", " + sf3(dy) + units[yValue] + ")");
-    focus.select("text").attr("x", function(){
-      var str = focus.attr("transform");
-      str = str.slice(10);
-      var num = parseInt(str);
-      if(num > 800){
-        return -80;
-      }
-      else return 10;
-    })  
-}
-
-function adjustFocus2(data, mouse){ //Adjusts focus based on mouse position but sticks to data points (only if x axis is sorted)
+function adjustFocus(data, mouse){ //Adjusts focus based on mouse position but sticks to data points (only if x axis is sorted)
     var x0 = x.invert(mouse[0]-margin.left),
     index = bisect(data, x0),
     d0 = data[index - 1],
     d1 = data[index];
-    console.log(index + " , " + x0);
-
-    var d = x0 - d0[xValue] > d1[xValue] - x0 ? d1 : d0;
-    focus.attr("transform", "translate(" + x(d[xValue]) + "," + y(d[yValue]) + ")");
-    focus.select("text").text("(" + dp1(d[xValue]) + units[xValue] + ", " + dp1(d[yValue]) + units[yValue] + ")");
+    var d = x0 - d0[xValue.toUpperCase()] > d1[xValue.toUpperCase()] - x0 ? d1 : d0;
+    focus.attr("transform", "translate(" + x(d[xValue.toUpperCase()]) + "," + y(d[yValue.toUpperCase()]) + ")");
+    focus.select("text").text("(" + dp1(d[xValue.toUpperCase()]) + units[xValue] + ", " + dp1(d[yValue.toUpperCase()]) + units[yValue] + ")");
     focus.select("text").attr("x", function(){
       var str = focus.attr("transform");
       str = str.slice(10);
@@ -216,38 +190,3 @@ function adjustFocus2(data, mouse){ //Adjusts focus based on mouse position but 
       else return 10;
     })
 };
-
-function getData(){ // Function for refreshing the data tag in the html (effectively refreshing the data)
-  if(d3.select(".data")) d3.select("data").remove();
-  d3.select("script").insert("script")
-    .attr("src", "http://balloon.mybluemix.net/getdata")
-    .attr("class", "data");
-}
-
-function extract_payload(data){   // Extract expected info from json
-  var payload_array = [];
-  data.forEach(function(datum){
-    var payload = datum.payload; // Remove the id and rev from the json
-    payload_array.push(payload); 
-  })
-  return payload_array;
-}
-
-function sf3(value){
-  var format = d3.format(".4r");
-  if(typeof value == 'string' || value instanceof String) return value;
-  else return format(value);
-}
-function timeify(time){
-  var t = time.split(":");
-  var mins = parseInt(t[1]) + parseInt(t[0])*60;
-  var secs = parseInt(t[2]) + mins*60;
-  return secs;
-}
-function untimeify(totalsecs){
-  var mins = Math.floor(totalsecs/60);
-  var secs = totalsecs - mins*60;
-  var hrs = Math.floor(mins/60);
-  mins = mins - hrs*60;
-  return hrs + ":" + mins + ":" + Math.round(secs);
-}
