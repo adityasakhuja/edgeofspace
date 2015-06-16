@@ -698,3 +698,15 @@ header nav ul li a.bordered {
     text-align: center;
     color: rgba(255,255,255,.4);
 }
+
+#sim {
+  position: relative;
+  width: 100%
+}
+
+#sim p {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 100%;
+}
