@@ -710,3 +710,82 @@ header nav ul li a.bordered {
   left: 20px;
   width: 100%;
 }
+
+.speech-bubble {
+  float: right;
+  right: 150px;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  vertical-align: middle;
+  font-family: Arial;
+  font-weight: 400;
+  font-size: 30px;
+  color:#fff;
+  background:#78B8F0;
+}
+
+.speech-bubble:before {
+  content:"";
+  position:absolute;
+  bottom:-105px;
+  right:0;
+  border-width:0 0 105px 105px;
+  border-style:solid;
+  border-color:transparent #78B8F0;
+}
+
+.speech-bubble:after {
+  content:"";
+  position:absolute;
+  bottom:-105px;
+  right:64px;
+  border-width:0 0 105px 41px;
+  border-style:solid;
+  border-color:transparent #000;
+}
+
+.fact-bubble {
+  text-align: center;
+  width: 500px;
+  float: right;
+  right: 300px;
+  position:relative;
+  padding:15px;
+  margin:100px 0 0.5em;
+  color:#333;
+  background:#eee;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+}
+
+.fact-bubble p {font-size:28px; line-height:1.25em;}
+
+/* this isn't necessary, just saves me having to edit the HTML of the demo */
+.fact-bubble:before {
+  position:absolute;
+  top:-60px;
+  left:0;
+  width:155px;
+  height:36px;
+  /* reduce the damage in FF3.0 */
+  display:block;
+}
+
+/* creates the triangle */
+.fact-bubble:after {
+  content:"";
+  position:absolute;
+  top:-30px;
+  left:50px;
+  border:15px solid transparent;
+  border-bottom-color:#eee;
+  /* reduce the damage in FF3.0 */
+  display:block;
+  width:0;
+}
+
+/* display of quote author (alternatively use a class on the element following the blockquote) */
+.fact-bubble + p {padding-left:15px; font:14px Arial, sans-serif;}

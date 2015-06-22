@@ -7,6 +7,7 @@ var MINTEMP = -50, //Global variables
 getData(); //Initial get of data
 
 function callback(data){ //Callback once data has been loaded
+	
 	var alt = data.ALTITUDE; //Extract variables from raw data
 	var temp = data.TEMP;
 	displayAltImg(alt); //Load the images onto the page once we know which one to load
