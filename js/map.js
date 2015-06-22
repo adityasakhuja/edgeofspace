@@ -8,27 +8,34 @@ var STARTLAT = 51.4796075,
     STARTLON = -0.2;
 
 var map = null,
-    prevFlightPath = null,
+    flightPath = null,
+    drivePath = null,
+    car_marker = null,
     launch_marker = null,
     balloon_marker = null;
 
 var launch_img = { //Define launching pad image for map
   url: "img/launchpad_tracker_icon_small.png",
   size: new google.maps.Size(57, 17),
-  // The origin for this image is 0,0.
   origin: new google.maps.Point(0,0),
   // The anchor for this image is the centre.
   anchor: new google.maps.Point(28, 9)
 };
 
 var balloon_img = { //Define launching balloon image for map
-  url: "img/balloon_tracker_icon.png",
-  // This marker is 20 pixels wide by 32 pixels tall.
-  size: new google.maps.Size(20, 32),
-  // The origin for this image is 0,0.
+  url: "img/balloon_tracker_icon_small.png",
+  size: new google.maps.Size(37, 60),
   origin: new google.maps.Point(0,0),
   // The anchor for this image is the base of the balloon at 0,16.
-  anchor: new google.maps.Point(0, 16)
+  anchor: new google.maps.Point(18, 58)
+};
+
+var car_img = { //Define chase car image for map
+  url: "img/car_tracker_icon_small.png",
+  size: new google.maps.Size(20, 42),
+  origin: new google.maps.Point(0,0),
+  // The anchor for this image is the centre.
+  anchor: new google.maps.Point(10, 21)
 };
 
 google.maps.event.addDomListener(window, 'load', initialize); // Create DOM listener to draw map once page has loaded
@@ -52,16 +59,16 @@ function callback(data){ // Draw line when data refreshes
     flightPlanCoordinates.push(new google.maps.LatLng(point.LATITUDE,point.LONGITUDE));
   })
 
+  if(!flightPath)
   flightPath = new google.maps.Polyline({
     path: flightPlanCoordinates,
+    map: map,
     geodesic: true,
     strokeColor: '#FF0000',
     strokeOpacity: 0.8,
     strokeWeight: 2
   });
-  flightPath.setMap(map);
-  if(prevFlightPath != null) prevFlightPath.setMap(null);
-  prevFlightPath = flightPath;
+  else flightPath.setPath(flightPlanCoordinates);
 
   if(!launch_marker) //Only draw launch marker once
   launch_marker = new google.maps.Marker({
@@ -71,30 +78,62 @@ function callback(data){ // Draw line when data refreshes
       icon: launch_img
   });
 
-  console.log(balloon_marker);
   if(!balloon_marker) //Only draw balloon marker first time otherwise update position only
   balloon_marker = new google.maps.Marker({
       position: new google.maps.LatLng(sorted_data[sorted_data.length-1].LATITUDE,sorted_data[sorted_data.length-1].LONGITUDE),
       title:"Current Position",
       map: map,
-      icon: "img/balloon_tracker_icon_small.png"
+      icon: balloon_img
   });
   else balloon_marker.setPosition(new google.maps.LatLng(sorted_data[sorted_data.length-1].LATITUDE,sorted_data[sorted_data.length-1].LONGITUDE));
 }
 
-setInterval(getData, 5000); //Re-render every 2 seconds
+function chasecar(data){ // Draw line when data refreshes
+  var sorted_data = sort_data(data)
+
+  var flightPlanCoordinates = [];
+  sorted_data.forEach(function(point){
+    flightPlanCoordinates.push(new google.maps.LatLng(point.LATITUDE,point.LONGITUDE));
+  })
+
+  if(!drivePath)
+  drivePath = new google.maps.Polyline({
+    path: flightPlanCoordinates,
+    geodesic: true,
+    strokeColor: '#00FF00',
+    strokeOpacity: 0.8,
+    strokeWeight: 2
+  });
+  else drivePath.setPath(flightPlanCoordinates);
+
+  if(!car_marker) //Only draw balloon marker first time otherwise update position only
+  car_marker = new google.maps.Marker({
+      position: new google.maps.LatLng(sorted_data[sorted_data.length-1].LATITUDE,sorted_data[sorted_data.length-1].LONGITUDE),
+      title:"Chase car",
+      map: map,
+      icon: car_img
+  });
+  else car_marker.setPosition(new google.maps.LatLng(sorted_data[sorted_data.length-1].LATITUDE,sorted_data[sorted_data.length-1].LONGITUDE));
+}
+
+setInterval(getData, 2000); //Re-render every 2 seconds
 
 function getData(){ // Function for refreshing the data tag in the html (effectively refreshing the data)
-  if($(".data").length) $(".data").remove();
-//  var script_el = "<script type='application/javascript' class='data' src='http://balloon.mybluemix.net/getgps'>";
-  var script_el = "<script type='application/javascript' class='data' src='data/example_pos.js'>";
+  //balloon data
+  if($(".gps").length) $(".gps").remove();
+//  var script_el = "<script type='application/javascript' class='gps' src='http://balloon.mybluemix.net/getgps'>";
+  var script_el = "<script type='application/javascript' class='gps' src='data/example_pos.js'>";
+  $("script").after(script_el);
+  //Chase car data
+  if($(".cargps").length) $(".cargps").remove();
+  script_el = "<script type='application/javascript' class='cargps' src='http://balloon.mybluemix.net/chasecar'>";
   $("script").after(script_el);
 }
 
 function sort_data(data){   // Extract expected info from json and sort it
 
   data.sort(function(a, b){ // Sort by time
-    return timeify(a.PITIME)-timeify(b.PITIME);
+    return timeify(a.TIME)-timeify(b.TIME);
   });
 
   return data;
