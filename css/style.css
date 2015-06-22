@@ -699,21 +699,36 @@ header nav ul li a.bordered {
     color: rgba(255,255,255,.4);
 }
 
-#sim {
+.sim {
   position: relative;
-  width: 100%
+  left: 0;
+  top: 0;
 }
 
-#sim p {
+.foreground {
+  position: absolute;
+  top: 10px;
+  left: 100px;
+  width: 70%;
+}
+
+.background {
+  position: relative;
+  left: 100px;
+  top: 0;
+  width: 70%;
+}
+
+.sim p {
   position: absolute;
   top: 0;
   left: 20px;
   width: 100%;
 }
 
-.speech-bubble {
+.stat-bubble {
   float: right;
-  right: 150px;
+  right: 30px;
   position: relative;
   width: 150px;
   height: 150px;
@@ -722,28 +737,45 @@ header nav ul li a.bordered {
   font-family: Arial;
   font-weight: 400;
   font-size: 30px;
-  color:#fff;
-  background:#78B8F0;
+  color:#333;
+  background:#eee;
+  margin-bottom: 100px;
 }
 
-.speech-bubble:before {
+/*.stat-bubble:before {
   content:"";
   position:absolute;
   bottom:-105px;
   right:0;
   border-width:0 0 105px 105px;
   border-style:solid;
-  border-color:transparent #78B8F0;
-}
+  border-color:transparent #eee;
+}*/
 
-.speech-bubble:after {
+/*.stat-bubble:after {
   content:"";
   position:absolute;
   bottom:-105px;
   right:64px;
   border-width:0 0 105px 41px;
   border-style:solid;
-  border-color:transparent #000;
+  border-color:transparent #fff;
+  opacity: 0;
+}*/
+
+.stat-bubble:after {
+  content:"";
+  position:absolute;
+  top: 50px;
+  left: -30px;
+  border:15px solid transparent;
+  border-bottom-color:#eee;
+  transform: rotate(90deg);
+  -webkit-transform: rotate(-90deg);
+  -ms-transform: rotate(90deg);
+  /* reduce the damage in FF3.0 */
+  display:block;
+  width:0;
 }
 
 .fact-bubble {
@@ -753,7 +785,7 @@ header nav ul li a.bordered {
   right: 300px;
   position:relative;
   padding:15px;
-  margin:100px 0 0.5em;
+  margin:20px 0 0.5em;
   color:#333;
   background:#eee;
   -webkit-border-radius:10px;
@@ -789,3 +821,4 @@ header nav ul li a.bordered {
 
 /* display of quote author (alternatively use a class on the element following the blockquote) */
 .fact-bubble + p {padding-left:15px; font:14px Arial, sans-serif;}
+

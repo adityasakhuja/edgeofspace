@@ -20,14 +20,20 @@ function callback(data){ //Callback once data has been loaded
 
 function displayAltImg(alt){
 	//TODO once background is done for altitude this function should display that image in the same place.
+	var altRange = MAXALT - MINALT;
+	var picsPerMet = NUMPICS / altRange;
+	var altFromMin = alt - MINALT;
+	var altPicNo = NUMPICS - parseInt(picsPerMet*altFromMin);
+	var backImg = "<img src='img/simImagesForeground/" + altPicNo + ".png'/>";
+	$(".sim").prepend(backImg);
 }
 function displayTempImg(temp){ //Function that displays image depending on temperature given
 	var tempRange = MAXTEMP - MINTEMP;
 	var picsPerDeg = NUMPICS / tempRange;
 	var degFromMin = temp - MINTEMP;
-	var picno = NUMPICS - parseInt(picsPerDeg*degFromMin);
-	var img = "<img src='img/simImagesForeground/" + picno + ".png'/>";
-	$(".sim").prepend(img);
+	var tempPicNo = NUMPICS - parseInt(picsPerDeg*degFromMin);
+	var forImg = "<img src='img/simImagesForeground/" + tempPicNo + ".png'/>";
+	$(".sim").prepend(forImg);
 }
 
 function getTempColour(temp){
