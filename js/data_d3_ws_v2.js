@@ -118,10 +118,7 @@ ws.onmessage = function (msg){
 };
 
 ws.onclose = function(){ 
-  // attempt to reconnect
-  alert("Connection is closed, attemping reconnect");
-  ws = new WebSocket("ws://balloon.mybluemix.net/balloondata");
-  data = [];
+  alert("Connection lost to server, refresh to keep receiving live data");
 };
 
 function drawData(){
