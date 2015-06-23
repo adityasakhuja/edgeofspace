@@ -121,8 +121,8 @@ setInterval(getData, 2000); //Re-render every 2 seconds
 function getData(){ // Function for refreshing the data tag in the html (effectively refreshing the data)
   //balloon data
   if($(".gps").length) $(".gps").remove();
-//  var script_el = "<script type='application/javascript' class='gps' src='http://balloon.mybluemix.net/getgps'>";
-  var script_el = "<script type='application/javascript' class='gps' src='data/example_pos.js'>";
+  var script_el = "<script type='application/javascript' class='gps' src='http://balloon.mybluemix.net/getgps'>";
+  //var script_el = "<script type='application/javascript' class='gps' src='data/example_pos.js'>";
   $("script").after(script_el);
   //Chase car data
   if($(".cargps").length) $(".cargps").remove();
