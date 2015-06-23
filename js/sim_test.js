@@ -11,9 +11,20 @@
 	var img = "<img class='foreground' src='img/simImagesForeground/" + picno + ".png'/>";
 	$(".sim").append(img);
 	
-	var facts = [];
-	facts[1] = "This is the first fact\n";
-	facts[2] = "This is the second fact\n";
+	var altFacts = [];
+	altFacts[1] = "<p>Before you reach 1200m above sea level, altitude exposure would not have any extreme effects on the human body besides reduces physical experience.</p>";
+	altFacts[2] = "<p>Between 1200m and 2400m, the human body starts to experience mild illness and drop in vision</p>";
+	altFacts[3] = "<p>Moving up from 2400m, the human body will experience greater illness along with mental and psychological effects like decreased perception, memory, judgement and attention. Rising above 2500m could also lead to High-Altitude Pulmonary Edema: a life-threatening form of non-cardiogenic pulmonary edema (fluid accumulation in the lungs).</p>";
+	altFacts[4] = "<p>Well, you're fucked if you went over 36050m!</p>";
 
-	var fact_start = "These are facts picked out from the array of facts according to returned values of temperature and altitude:\n";
-	$(".fact").text(fact_start + facts[1] + facts[2]);
+	var tempFacts = [];
+
+	if (alt <= 1200) {
+		$(".fact").append(altFacts[1]);
+	}
+	else if ((1200 < alt) && (alt <= 2400)) {
+		$(".fact").append(altFacts[2]);
+	}
+	else if ((2400 < alt) && (alt <= 4000)) {
+		$(".fact").append(altFacts[1]);
+	}
