@@ -759,13 +759,14 @@ header nav ul li a.bordered {
 }
 
 .fact-bubble {
-  text-align: center;
-  width: 45em;
-  float: right;
-  right: 10em;
+  text-align: justify;
+  width: 70%;
+  /*float: right;*/
+  /*right: 10em;*/
+  left: 6.25em;
   position: relative;
   padding: 15px;
-  margin: 20px 0 0.5em;
+  margin: 20px 0 0;
   color: #333;
   background: #eee;
   -webkit-border-radius: 1em;
@@ -782,4 +783,8 @@ header nav ul li a.bordered {
   border-bottom-color: #eee;
   display:block;
   width:0;
+}
+
+.disclaimer {
+  visibility: hidden;
 }

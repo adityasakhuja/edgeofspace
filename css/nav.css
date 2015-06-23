@@ -153,6 +153,15 @@
   #cssmenu ul li a:before {
     display: none;
   }
+
+  .stat-bubble, .fact-bubble, .alt, .temp, .sim, .fact {
+    visibility: hidden;
+  }
+
+  .disclaimer {
+    visibility: visible;
+  }
+
 }
 /* Small screen laptop */
 @media screen and (max-width: 852px) {
