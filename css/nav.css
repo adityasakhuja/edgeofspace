@@ -131,6 +131,9 @@
 
 /* Small Screens - Vertical Navbar */
 @media screen and (max-width: 852px) { 
+  body {
+    background: #000;
+  }
   #cssmenu ul li {
     float: none;
     display: block;
