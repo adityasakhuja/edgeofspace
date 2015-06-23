@@ -4,8 +4,8 @@ var MINTEMP = -50, //Global variables
 	MAXALT = 40000,
 	NUMPICS = 101;
 
-var prevAlt = null,
-	prevTemp = null;
+var prevAlt = 0,
+	prevTemp = 0;
 
 getData(); //Initial get of data
 setInterval(getData, 2000); //Re-render every 2 seconds
@@ -18,11 +18,11 @@ function callback(data){ //Callback once data has been loaded
 	if(!temp || temp == prevTemp) return;
 	prevAlt = alt; prevTemp = temp;
 
-	displayAltImg(alt); //Load the images onto the page once we know which one to load
-	displayTempImg(temp);
+	displayTempImg(temp); //Load the images onto the page once we know which one to load
+	displayAltImg(alt); 
 
-	$(".alt").text(alt + "m"); //Add in text
-	$(".temp").text(temp + "\u00B0C");
+	$(".alt").text(prevAlt + "m"); //Add in text
+	$(".temp").text(prevTemp + "\u00B0C");
 	//TODO make text change colour depending on value
 }
 
@@ -32,16 +32,16 @@ function displayAltImg(alt){
 	var picsPerMet = NUMPICS / altRange;
 	var altFromMin = alt - MINALT;
 	var altPicNo = NUMPICS - parseInt(picsPerMet*altFromMin);
-	var backImg = "<img src='img/simImagesForeground/" + altPicNo + ".png'/>";
-	$(".sim").prepend(backImg);
+	var foreImg = "<img class='foreground' src='img/simImagesForeground/" + altPicNo + ".png'/>";
+	$(".sim").append(foreImg);
 }
 function displayTempImg(temp){ //Function that displays image depending on temperature given
 	var tempRange = MAXTEMP - MINTEMP;
 	var picsPerDeg = NUMPICS / tempRange;
 	var degFromMin = temp - MINTEMP;
 	var tempPicNo = NUMPICS - parseInt(picsPerDeg*degFromMin);
-	var forImg = "<img src='img/simImagesForeground/" + tempPicNo + ".png'/>";
-	$(".sim").prepend(forImg);
+	var backImg = "<img class='background' src='img/simImagesBackground/" + tempPicNo + ".png'/>";
+	$(".sim").append(backImg);
 }
 
 function getTempColour(temp){
