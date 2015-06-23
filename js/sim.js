@@ -4,12 +4,20 @@ var MINTEMP = -50, //Global variables
 	MAXALT = 40000,
 	NUMPICS = 101;
 
+var prevAlt = null,
+	prevTemp = null;
+
 getData(); //Initial get of data
+setInterval(getData, 2000); //Re-render every 2 seconds
 
 function callback(data){ //Callback once data has been loaded
-	
 	var alt = data.ALTITUDE; //Extract variables from raw data
 	var temp = data.TEMP;
+	
+	if(!alt || alt == prevAlt) return; //Error checking
+	if(!temp || temp == prevTemp) return;
+	prevAlt = alt; prevTemp = temp;
+
 	displayAltImg(alt); //Load the images onto the page once we know which one to load
 	displayTempImg(temp);
 
@@ -38,10 +46,9 @@ function displayTempImg(temp){ //Function that displays image depending on tempe
 
 function getTempColour(temp){
 }
-//TODO repeatedly call this function in order to refresh the data on page live
+
 function getData(){ // Function for refreshing the data tag in the html (effectively refreshing the data)
   if($(".data").length) $(".data").remove(); //Check if data has been got before if it has then remove it
   var script_el = "<script type='application/javascript' class='data' src='http://balloon.mybluemix.net/latestsim'>"; 
   $("script").after(script_el); //Add in script tag to get data
 }
-
