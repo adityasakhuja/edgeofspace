@@ -707,14 +707,14 @@ header nav ul li a.bordered {
 
 .foreground {
   position: absolute;
-  top: 10px;
-  left: 100px;
+  top: 0.625em;
+  left: 6.25em;
   width: 70%;
 }
 
 .background {
   position: relative;
-  left: 100px;
+  left: 6.25em;
   top: 0;
   width: 70%;
 }
@@ -728,97 +728,58 @@ header nav ul li a.bordered {
 
 .stat-bubble {
   float: right;
-  right: 30px;
+  right: 1em;
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 5em;
+  height: 5em;
   text-align: center;
   vertical-align: middle;
   font-family: Arial;
   font-weight: 400;
-  font-size: 30px;
+  font-size: 1.8em;
   color:#333;
   background:#eee;
-  margin-bottom: 100px;
+  border-radius: 1em;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
 }
-
-/*.stat-bubble:before {
-  content:"";
-  position:absolute;
-  bottom:-105px;
-  right:0;
-  border-width:0 0 105px 105px;
-  border-style:solid;
-  border-color:transparent #eee;
-}*/
-
-/*.stat-bubble:after {
-  content:"";
-  position:absolute;
-  bottom:-105px;
-  right:64px;
-  border-width:0 0 105px 41px;
-  border-style:solid;
-  border-color:transparent #fff;
-  opacity: 0;
-}*/
 
 .stat-bubble:after {
   content:"";
   position:absolute;
-  top: 50px;
-  left: -30px;
+  top: 1em;
+  left: -1em;
   border:15px solid transparent;
   border-bottom-color:#eee;
   transform: rotate(90deg);
   -webkit-transform: rotate(-90deg);
   -ms-transform: rotate(90deg);
-  /* reduce the damage in FF3.0 */
   display:block;
   width:0;
 }
 
 .fact-bubble {
   text-align: center;
-  width: 500px;
+  width: 30em;
   float: right;
-  right: 300px;
-  position:relative;
-  padding:15px;
-  margin:20px 0 0.5em;
-  color:#333;
-  background:#eee;
-  -webkit-border-radius:10px;
-  -moz-border-radius:10px;
-  border-radius:10px;
+  right: 20em;
+  position: relative;
+  padding: 15px;
+  margin: 20px 0 0.5em;
+  color: #333;
+  background: #eee;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
+  border-radius: 1em;
 }
 
-.fact-bubble p {font-size:28px; line-height:1.25em;}
-
-/* this isn't necessary, just saves me having to edit the HTML of the demo */
-.fact-bubble:before {
-  position:absolute;
-  top:-60px;
-  left:0;
-  width:155px;
-  height:36px;
-  /* reduce the damage in FF3.0 */
-  display:block;
-}
-
-/* creates the triangle */
 .fact-bubble:after {
   content:"";
   position:absolute;
-  top:-30px;
-  left:50px;
-  border:15px solid transparent;
-  border-bottom-color:#eee;
-  /* reduce the damage in FF3.0 */
+  top: -1.9em;
+  left: 3em;
+  border: 15px solid transparent;
+  border-bottom-color: #eee;
   display:block;
   width:0;
 }
-
-/* display of quote author (alternatively use a class on the element following the blockquote) */
-.fact-bubble + p {padding-left:15px; font:14px Arial, sans-serif;}
-
