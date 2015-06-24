@@ -4,8 +4,8 @@
 // Date: 27/4/2015
 ////////////////////////////////////////
 
-var STARTLAT = 51.4796075,
-    STARTLON = -0.2;
+var STARTLAT = 52.212974,
+    STARTLON = 0.097657;
 
 var map = null,
     flightPath = null,
