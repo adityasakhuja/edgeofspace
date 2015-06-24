@@ -116,7 +116,7 @@ function chasecar(data){ // Draw line when data refreshes
   else car_marker.setPosition(new google.maps.LatLng(sorted_data[sorted_data.length-1].LATITUDE,sorted_data[sorted_data.length-1].LONGITUDE));
 }
 
-setInterval(getData, 2000); //Re-render every 2 seconds
+setInterval(getData, 200000); //Re-render every 2 seconds (changed to 200s post-launch)
 
 function getData(){ // Function for refreshing the data tag in the html (effectively refreshing the data)
   //balloon data
@@ -132,11 +132,42 @@ function getData(){ // Function for refreshing the data tag in the html (effecti
 
 function sort_data(data){   // Extract expected info from json and sort it
 
+  //Remove points not in UK
+  var minlong = -9.23,
+      maxlong = 2.69,
+      minlat = 49.84,
+      maxlat = 60.85;
+
+  for(var i = data.length - 1; i >= 0; i--){ //
+    var lat = data[i].LATITUDE, lon = data[i].LONGITUDE;
+    if(lat < minlat || lat > maxlat || lon < minlong || lon > maxlong)
+      data.splice(i, 1);
+  }
+
   data.sort(function(a, b){ // Sort by time
     return timeify(a.TIME)-timeify(b.TIME);
   });
 
   return data;
+}
+
+function bisect(array, key, accessor) {
+    var lo = 0,
+        hi = array.length - 1,
+        mid,
+        element;
+    while (lo <= hi) {
+        mid = ((lo + hi) >> 1);
+        element = array[mid][accessor];
+        if (element < key) {
+            lo = mid + 1;
+        } else if (element > key) {
+            hi = mid - 1;
+        } else {
+            return mid;
+        }
+    }
+    return mid;
 }
 
 function timeify(time){
